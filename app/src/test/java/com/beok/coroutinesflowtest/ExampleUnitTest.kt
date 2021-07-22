@@ -13,19 +13,27 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+@ExperimentalTime
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
 
-    @ExperimentalTime
     @Test
     fun consuming_event() = runBlocking {
         flowOf("one", "two").test {
             assertEquals("one", expectItem())
             assertEquals("two", expectItem())
             expectComplete()
+        }
+    }
+
+    @Test
+    fun consuming_event_ignore() = runBlocking {
+        flowOf("one", "two").test {
+            assertEquals("one", expectItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }
